@@ -2,16 +2,17 @@
 
 DVWA es una aplicación web PHP / MySQL vulnerable que sirve para practicar con algunas de las vulnerabilidades web más comunes, es un muy buen recurso para iniciarse en el hacking web.
 
-Este artículo es una guía de iniciación en hacking web que pretende explicar algunas de las vulnerabilidades web más conocidas. Se verá la explotación de la mayoria de vulnerabilidades de esta aplicación, excepto las que exceden el objetivo del artículo.
-
+[comment]: <> (
+#Este artículo es una guía de iniciación en hacking web que pretende explicar algunas de las vulnerabilidades web más conocidas. Se verá la explotación de la mayoria de vulnerabilidades de esta aplicación, excepto las que exceden el objetivo del artículo.
+)
 
 # Indice
-########
 
-[Despliegue](https://github.com/sapellaniz/dvwa#despliegue)
+1. [Despliegue](https://github.com/sapellaniz/dvwa#despliegue)
+2. [Brute force](https://github.com/sapellaniz/dvwa#brute-force)
+3. [Command injection](https://github.com/sapellaniz/dvwa#command-injection)
 
 # Despliegue
-############
 
 Gracias a docker, este laboratorio se puede desplegar en cuestion de segundos:
 
@@ -30,27 +31,29 @@ En la sección [DVWA Security](http://127.0.0.1/login.php) se puede configurar e
 ![Security](https://github.com/sapellaniz/dvwa/blob/master/img/security.png)
 
 # Brute Force
-#############
 
-(pantallazo)
+![Brute Force](https://github.com/sapellaniz/dvwa/blob/master/img/brute-00.png)
 
-La primera vulnerabilidad es fuerza bruta, consiste en probar todas las posibles combinaciones de unas credenciales. En este caso realizaré una variante del ataque que es fuerza bruta por diccionario, en vez de probar todas las posibles combinaciones, probaré solamente con las contraseñas almacenadas en una lista (link a https://github.com/drtychai/wordlists/blob/master/fasttrack.txt).
+La primera vulnerabilidad es fuerza bruta, consiste en probar todas las posibles combinaciones de unas credenciales. En este caso realizaremos una variante del ataque que es fuerza bruta por diccionario, en vez de probar todas las posibles combinaciones, probaremos solamente con las contraseñas almacenadas en la lista [fasttrack.txt](https://github.com/drtychai/wordlists/blob/master/fasttrack.txt)
 
 ### Security: low
-En el nivel bajo de seguridad, no hay ninguna medida de protección frente a los ataques de fuerza bruta, para explotar esta vulnerabilidad usaré la herramienta hydra. Para poder realizarlo necesito la IP del servidor, el usuario, el diccionario de contraseñas, la consulta HTTP, la cookie de identificación "PHPSESSID", y el mensaje que se muestra cuando el login es fallido:
+En el nivel bajo de seguridad, no hay ninguna medida de protección frente a los ataques de fuerza bruta, la parte que afecta a cada vulnerabilidad puede verse pulsando en el botón "View Source".
+
+Para explotar esta vulnerabilidad podemos usar la herramienta hydra. Para poder realizarlo necesitamos la IP del servidor, el usuario, el diccionario de contraseñas, la consulta HTTP, la cookie de identificación "PHPSESSID", y el mensaje que se muestra cuando el login es fallido:
 
 ```
 hydra 127.0.0.1 -l admin -P fasttrack.txt http-get-form "/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:Username and/or password incorrect.:H=Cookie: PHPSESSID=rmc2daskbu2hcnskgm815hgbn2; security=low" -t 32
 ```
 
+![Brute Force](https://github.com/sapellaniz/dvwa/blob/master/img/brute-01.png)
+
 ### Security: medium
-En el nivel medio de seguridad, la única protección es un delay de 2 segundos, si se le puede llamar protección a esto. Se puede explotar con el mismo comando que usé para explotar la vulnerabilidad en nivel bajo de seguridad.
+En el nivel medio de seguridad, la única protección es un delay de 2 segundos, si se le puede llamar protección a esto. Se puede explotar con el mismo comando que usamos para explotar la vulnerabilidad en nivel bajo de seguridad.
 
 
 # Command injection
-###################
 
-(pantallazo)
+![Command injection](https://github.com/sapellaniz/dvwa/blob/master/img/command-injection-00.png)
 
 Esta vulnerabilidad es la numero 1 en el OWASP Top Ten, esta organización la define así:
 
