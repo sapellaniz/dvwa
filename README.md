@@ -19,18 +19,16 @@ Gracias a docker, este laboratorio se puede desplegar en cuestion de segundos:
 $ sudo docker run --name dvwa --rm -it -p 80:80 vulnerables/web-dvwa
 ```
 
-Una vez lanzado el contenedor, solamente hay que crear la base de datos y ya se puede comenzar a practicar ataques:
+Antes de comenzar con los ataques, es necesario crear la base de datos en [http://127.0.0.1/setup.php](http://127.0.0.1/setup.php)
 
-[http://127.0.0.1/setup.php](http://127.0.0.1/setup.php)
-
-![alt text](https://github.com/sapellaniz/setup.png "Setup")
+![Setup](https://github.com/sapellaniz/setup.png)
 (pantallazo)
 
-Una vez creada la base de datos se puede acceder a la apliacación con las credenciales por defecto (admin:password) en [http://127.0.0.1/login.php](http://127.0.0.1/login.php).
+Una vez creada la base de datos, se puede acceder a la apliacación con las credenciales por defecto (admin:password) en [http://127.0.0.1/login.php](http://127.0.0.1/login.php).
 
-En el apartado [DVWA Security](http://127.0.0.1/login.php) se puede configurar el nivel de dificultad del laboratorio.
+En la sección [DVWA Security](http://127.0.0.1/login.php) se puede configurar el nivel de dificultad del laboratorio.
 
-![alt text](https://github.com/sapellaniz/security.png "Security")
+![Security](https://github.com/sapellaniz/security.png)
 
 # Brute Force
 #############
