@@ -1,13 +1,14 @@
-########
-# DVWA #
-########
+# DVWA
 
-DVWA es una aplicación web PHP / MySQL vulnerable que sirve para practicar con algunas de las vulnerabilidades web más comunes, es un muy buen recurso para iniciarse en el hacking web. En este artículo documentare la explotación de todas sus vulnerabilidades conocidas en diferentes dificultades.
+DVWA es una aplicación web PHP / MySQL vulnerable que sirve para practicar con algunas de las vulnerabilidades web más comunes, es un muy buen recurso para iniciarse en el hacking web.
+
+Este artículo es una guía de iniciación en hacking web que pretende explicar algunas de las vulnerabilidades web más conocidas. Se verá la explotación de la mayoria de vulnerabilidades de esta aplicación, excepto las que exceden el objetivo del artículo.
 
 
 # Indice
 ########
 
+[Despliegue](https://github.com/sapellaniz/dvwa#despliegue)
 
 # Despliegue
 ############
@@ -15,18 +16,21 @@ DVWA es una aplicación web PHP / MySQL vulnerable que sirve para practicar con 
 Gracias a docker, este laboratorio se puede desplegar en cuestion de segundos:
 
 ```
-$ sudo systemctl status docker || sudo systemctl start docker
 $ sudo docker run --name dvwa --rm -it -p 80:80 vulnerables/web-dvwa
 ```
 
-Y ya podemos acceder al laboratorio, lo primero es crear la base de datos:
+Una vez lanzado el contenedor, solamente hay que crear la base de datos y ya se puede comenzar a practicar ataques:
 
-(link y pantallazo de http://127.0.0.1/setup.php)
+[http://127.0.0.1/setup.php](http://127.0.0.1/setup.php)
 
-Las credenciales por defecto son "admin:password".
+![alt text](https://github.com/sapellaniz/setup.png "Setup")
+(pantallazo)
 
-En el apartado "DVWA Security" se puede configurar el nivel de dificultad del laboratorio. En cada página para explotar cada vulnerabilidad, hay un boton que muestra la parte de código vulnerable en cada caso, también se puede comparar el código de una misma vulnerabilidad en las diferentes dificultades.
+Una vez creada la base de datos se puede acceder a la apliacación con las credenciales por defecto (admin:password) en [http://127.0.0.1/login.php](http://127.0.0.1/login.php).
 
+En el apartado [DVWA Security](http://127.0.0.1/login.php) se puede configurar el nivel de dificultad del laboratorio.
+
+![alt text](https://github.com/sapellaniz/security.png "Security")
 
 # Brute Force
 #############
