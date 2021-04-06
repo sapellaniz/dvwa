@@ -62,16 +62,22 @@ Esta vulnerabilidad es la numero 1 en el OWASP Top Ten, esta organización la de
 Este ataque se diferencia de la inyección de código en que la inyección de código le permite al atacante agregar su propio código que luego es ejecutado por la aplicación. En Command Injection, el atacante extiende la funcionalidad predeterminada de la aplicación, que ejecuta comandos del sistema, sin la necesidad de inyectar código."
 
 ### Security: low
-Con el nivel de seguridad bajo seleccionado, no hay ninguna protección, la entrada delm formulario se pasará directamente a una shell, solamente hay que interrumpir el comando empezado por la aplicación e introducir el comando que deseemos.
+Con el nivel de seguridad bajo seleccionado, no hay ninguna protección, la entrada del formulario se pasará directamente a una shell, solamente hay que interrumpir el comando empezado por la aplicación e introducir el comando que deseemos.
+
 ```
-;cat /etc/passwd
+;cat /etc/passwd #
 ```
+
+![Command injection](https://github.com/sapellaniz/dvwa/blob/master/img/command-injection-01.png)
 
 ### Security: medium
 Con el nivel de seguridad medio seleccionado, la única protección es que los badchars "&&" y ";" serán eliminados de nuestra entrada, pero podemos interrumpir el comando con muchos otros:
+
 ```
-&cat /etc/passwd
+&cat /etc/passwd #
 ```
+
+![Command injection](https://github.com/sapellaniz/dvwa/blob/master/img/command-injection-02.png)
 
 ### Security: high
 Con el nivel de seguridad alto seleccionado, la lista de badchars ha aumentado a "&", ";", "| ", "-", "$", "(", ")", "'" y "||". Si nos fijamos, se puede ver que el badchar "| " contiene un espacio después de la tubería, asi que si introducimos una tubería sin un espacio inmediatamente después, no será eliminada:
@@ -79,6 +85,7 @@ Con el nivel de seguridad alto seleccionado, la lista de badchars ha aumentado a
 |cat /etc/passwd
 ```
 
+REVERSE SHELL!!
 
 # File Inclusion
 ###################
