@@ -14,6 +14,8 @@ DVWA es una aplicación web PHP / MySQL vulnerable que sirve para practicar con 
 4. [File inclusion](https://github.com/sapellaniz/dvwa#file-inclusion)
 5. [Log poisoning](https://github.com/sapellaniz/dvwa#log-poisoning)
 6. [File upload](https://github.com/sapellaniz/dvwa#file-upload)
+7. [SQL injection](https://github.com/sapellaniz/dvwa#sql-injection)
+7. [SQL injection (Blind)](https://github.com/sapellaniz/dvwa#sql-injection-(blind))
 
 # Despliegue
 
@@ -193,7 +195,6 @@ $ rlwrap nc 172.17.0.2 2222
 
 
 # File Upload
-#############
 
 ![File upload](https://github.com/sapellaniz/dvwa/blob/master/img/file-upload-00.png)
 
@@ -213,45 +214,59 @@ $ curl -s http://127.0.0.1/hackable/uploads/reverse.php
 ![File upload](https://github.com/sapellaniz/dvwa/blob/master/img/file-upload-01.png)
 
 ### Security: medium
-Con el nivel de seguridad medio seleccionado, nos encontramos con dos comprobaciones: que el archivo sea .png o .jpeg y que tenga un tamaño menor que 100000 bytes. Si subimos el archivo de antes, al terminar en .php, nos cancela la subida, sin embargo, podemos subirlo con extensión .php.png, interceptar la petición con el navegador y cambiar la extensión a .php
+Con el nivel de seguridad medio seleccionado, nos encontramos con dos comprobaciones: que el archivo sea .png o .jpeg y que tenga un tamaño menor que 100000 bytes. Si subimos el archivo de antes, al terminar en .php, nos cancela la subida, sin embargo, podemos subirlo con extensión .php.png, interceptar la petición con el navegador y cambiar la extensión a .php. En este caso tuve problemas con las reverse shells así que utilicé la web shell [p0wny](https://github.com/flozz/p0wny-shell):
 
-(pantallazo)
+
+![File upload](https://github.com/sapellaniz/dvwa/blob/master/img/file-upload-02.png)
+
+![File upload](https://github.com/sapellaniz/dvwa/blob/master/img/file-upload-03.png)
 
 ### Security: high
-Con el nivel de seguridad alto seleccionado, hay una comprobación adicional, mediante la función getimagesize() comprueba el alto y ancho de la imagen. Para bypassear la protección hay que añadir la cadena "GIF89a" al inicio de la reverse shell, lo que provoca que ésta función falle y le de un alto y un ancho, aunque realmente no lo tenga.
+Con el nivel de seguridad alto seleccionado, hay una comprobación adicional, mediante la función getimagesize() comprueba el alto y ancho de la imagen. Para bypassear la protección hay que añadir la cadena "GIF89a" al inicio de la reverse shell, lo que provoca que ésta función falle y le de un alto y un ancho, aunque realmente no lo tenga. Aun así no podremos editar el nombre del archivo en el cuerpo de la petición, así que tendremos que modificar el nombre del archivo subido mediante la vulnerabilidad command injection.
+
+![File upload](https://github.com/sapellaniz/dvwa/blob/master/img/file-upload-04.png)
 
 
-# SQLi
-######
+
+# SQL injection
 
 Esta vulnerabilidad también pertenece a la categoría de inyecciones, la primera del OWASP Top Ten, en vez de código, permite inyectar código SQL en una consulta, debido a una validación de entrada insuficiente.
 
-(pantallazo)
+![SQLi](https://github.com/sapellaniz/dvwa/blob/master/img/sqli-00.png)
 
 ### Security: low
 Con el nivel de seguridad bajo seleccionado, no hay ninguna protección. Con estos payloads podemos obtener las tablas y columnas de la base de datos:
+
 ```
 ' AND 1=2 UNION SELECT table_name, column_name FROM information_schema.columns#
 'or 1=0 union select user,password from users#
 ```
 
+![SQLi](https://github.com/sapellaniz/dvwa/blob/master/img/sqli-01.png)
+
 ### Security: medium
-Con el nivel de seguridad bajo seleccionado, nos encontramos con la función mysqli_real_escape_string(), podemos usar los mismos payloads que en el nivel de seguridad bajo, pero sin los caracteres especiales:
+Con el nivel de seguridad bajo seleccionado, nos encontramos con la función mysqli_real_escape_string(), podemos usar los mismos payloads que en el nivel de seguridad bajo, pero sin los caracteres especiales. A demás, en vez de pasar el payload por un formulario, debemos interceptar la petición y editar su cuerpo:
+
 ```
 AND 1=2 UNION SELECT table_name, column_name FROM information_schema.columns
 or 1=0 union select user,password from users
 ```
 
+![SQLi](https://github.com/sapellaniz/dvwa/blob/master/img/sqli-02.png)
+
 ### Security: high
 Con el nivel de seguridad alto seleccionado, vemos que después de nuestra entrada, se añade la cadena "LIMIT 1" a la consulta. Esto hace que cada consulta solamente pueda mostrar un resultado. Esto se puede bypassear facilmente si al final de nuestra entrada añadimos el cracter '#':
+
 ```
 AND 1=2 UNION SELECT table_name, column_name FROM information_schema.columns#
 or 1=0 union select user,password from users#
 ```
 
+![SQLi](https://github.com/sapellaniz/dvwa/blob/master/img/sqli-03.png)
 
-# Blind SQLi
-############
+
+
+# SQL injection (Blind)
 
 Esta variante de SQLi se caracteriza porque la consulta no devuelve información en la respuesta del servidor, pero el resultado de la consulta puede deducirse mediante diferentes técnicas como por ejemplo añadir delays a las consultas cuando son correctas (Si la primera letra del nombre de la primera base de datos es una "A", espere 10 segundos).
 
@@ -369,16 +384,3 @@ url encode
 
 
 
-EUROPA SQLI (manual)
-
-devel <------ 
-
-TABBY LFI	(WAR FILE)
-https://medium.com/@stefanodevenuto/tabby-hackthebox-write-up-243e2b8d040c
-
-
-JARVIS sqli  (chunga)
-
-sqlmap --os-sell??
-
-1337_h4x0r	pAXP9wa5H6VC	eol99704@cuoly.com
