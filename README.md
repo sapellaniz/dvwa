@@ -2,9 +2,7 @@
 
 DVWA es una aplicación web PHP / MySQL vulnerable que sirve para practicar con algunas de las vulnerabilidades web más comunes, es un muy buen recurso para iniciarse en el hacking web.
 
-[comment]: <> (
-#Este artículo es una guía de iniciación en hacking web que pretende explicar algunas de las vulnerabilidades web más conocidas. Se verá la explotación de la mayoria de vulnerabilidades de esta aplicación, excepto las que exceden el objetivo del artículo.
-)
+Este artículo es una guía de iniciación en hacking web que pretende explicar algunas de las vulnerabilidades web más conocidas. Se verá la explotación de la mayoria de vulnerabilidades de esta aplicación, excepto las que exceden el objetivo del artículo.
 
 # Indice
 
@@ -15,7 +13,8 @@ DVWA es una aplicación web PHP / MySQL vulnerable que sirve para practicar con 
 5. [Log poisoning](https://github.com/sapellaniz/dvwa#log-poisoning)
 6. [File upload](https://github.com/sapellaniz/dvwa#file-upload)
 7. [SQL injection](https://github.com/sapellaniz/dvwa#sql-injection)
-7. [SQL injection (Blind)](https://github.com/sapellaniz/dvwa#sql-injection-(blind))
+8. [SQL injection (Blind)](https://github.com/sapellaniz/dvwa#sql-injection-blind)
+9. [Weak Session IDs](https://github.com/sapellaniz/dvwa#weak-session-ids)
 
 # Despliegue
 
@@ -282,9 +281,13 @@ sqlmap -u "http://127.0.0.1/vulnerabilities/sqli_blind/?id=1&Submit=Submit#" -co
     // solo algunos campos
 ```
 
+Esta herramienta es tan potente que permite incluso detectar y crackear los hashes dumpeados de las contraseñas almacenadas en la bsae de datos:
+
+![SQLi blind](https://github.com/sapellaniz/dvwa/blob/master/img/sqli-04.png)
+
+
 
 # Weal Session IDs
-##################
 
 (pantallazo)
 
@@ -302,7 +305,6 @@ Con el nivel de seguridad alto seleccionado, es igual que en el nivel bajo, solo
 
 
 # XSS Reflected
-###############
 
 (pantallazo)
 
